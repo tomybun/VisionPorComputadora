@@ -3,7 +3,14 @@
 
 
 import cv2
-img = cv2.imread('hoja.png' , 0 )
+
+
+img = cv2.imread('hoja.png' , 0)
+
+cv2.imshow('fotito', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()	
+
 # Para resolverlo podemos usar dos for anidados
 for i, row in enumerate(img) :
 	for j, col in enumerate(row) :
@@ -14,3 +21,7 @@ for i, row in enumerate(img) :
 	
 
 cv2.imwrite('resultado.png', img)
+
+cv2.imshow('fotito', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
