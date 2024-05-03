@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy as np
+
+import sys
 import cv2
 
-def translate(img, x, y):
-    (h, w) = (img.shape[0], img.shape[1])
-    M = np.float32([[1, 0, x],
-                    [0, 1, y]])
-    shifted = cv2.warpAffine(img, M, (w, h))
-    return shifted
-    
+modes = {'x': 0, 'y': 1, 'b': -1}
+
+def flip(img, mode):
+    if (mode not in modes.keys()):
+        return img
+    flipped = cv2.flip(img, modes[mode])
+    return flipped
     
 img = cv2.imread('hoja.png' , 1)
 
@@ -31,25 +32,20 @@ while True:
         
 cv2.destroyAllWindows()
 
-imagen_trasladada = translate(img, 50, 30)
+# Obtener el modo de volteo de los argumentos de la línea de comandos
+if len(sys.argv) > 1:
+    modo_volteo = sys.argv[1]
+else:
+    modo_volteo = 'x'  # Modo predeterminado si no se proporciona ningún argumento
+
+imagen_espejada = flip(img, modo_volteo)
      
 while True:
-    cv2.imshow('imagen transladada', imagen_trasladada)
+    cv2.imshow('imagen transladada', imagen_espejada)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('k'):
         break        
         
-
-
         
 cv2.destroyAllWindows()
-
-
-
-
-
-
-
-
-
 

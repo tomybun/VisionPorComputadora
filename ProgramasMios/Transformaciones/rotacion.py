@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy as np
+
 import cv2
 
-def translate(img, x, y):
-    (h, w) = (img.shape[0], img.shape[1])
-    M = np.float32([[1, 0, x],
-                    [0, 1, y]])
-    shifted = cv2.warpAffine(img, M, (w, h))
-    return shifted
+def rotate(image, angle, center=None, scale=1.0):
+
+    (h, w) = image.shape[:2]
     
+    if center is None:
+        center = (w/2, h/2)
+        
+    M = cv2.getRotationMatrix2D(center, angle, scale)
+    rotated = cv2.warpAffine(image, M, (w, h))
     
+    return rotated
+
+
 img = cv2.imread('hoja.png' , 1)
 
 #Como tenia problemas para abrir la foto completa hice esto:
@@ -31,25 +36,13 @@ while True:
         
 cv2.destroyAllWindows()
 
-imagen_trasladada = translate(img, 50, 30)
+imagen_rotada = rotate(img,30)
      
 while True:
-    cv2.imshow('imagen transladada', imagen_trasladada)
+    cv2.imshow('imagen transladada', imagen_rotada)
     k = cv2.waitKey(1) & 0xFF
     if k == ord('k'):
         break        
         
-
-
         
 cv2.destroyAllWindows()
-
-
-
-
-
-
-
-
-
-
