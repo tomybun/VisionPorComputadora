@@ -94,7 +94,9 @@ while True:
     if k == ord('e'):
     	imagen_transformada = transformacion_euclidiana(foto_recortada, angulo, x, y, escala)
     	cv2.imwrite('foto_recortada.png', imagen_transformada)
-    	break          
+    	break
+    if k == ord('r'):
+        img = img_copia.copy()          
         
 cv2.destroyAllWindows()
 
