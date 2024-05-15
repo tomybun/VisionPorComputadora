@@ -10,6 +10,8 @@ dibuja = False  # true si el botón está presionado
 xy_iniciales = -1, -1
 drawing = False
 
+
+
 ###############################################################################################################################
 def transformacion_euclidiana(img, angulo, x, y, escala):
     (h, w) = img.shape[:2]
@@ -51,7 +53,6 @@ def dibuja(event, x, y, flags, param):
             							# overlay es la primera imagen, 0.4 es el peso de esa imagen en la mezcla
             							# img es la otra imagen a mezclar y 0.6 es su peso en la mezcla, lo ultimo es un 
             							# parametro opcional
-            #cv2.rectangle(img, xy_iniciales, (x, y), (0, 0, 255), 2)  # Borde del rectángulo en rojo
             cv2.rectangle(img, xy_iniciales, (x, y), (128, 128, 128), 2)
     elif event == cv2.EVENT_LBUTTONUP:
         drawing = False
