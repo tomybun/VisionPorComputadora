@@ -13,45 +13,43 @@ def calcular_transformacion_afin(puntos_origen, puntos_destino):
 
 ###############################################################################################################################
 
-def insertar_imagen(imagen_fondo, imagen_insertar, puntos_destino):
+def insertar_imagen(img_fondo, img_insertar, puntos_destino):
 
 	# Obtener las dimensiones de la imagen de fondo
-	altura, ancho, canales = imagen_fondo.shape
-		
-	# Calcular la transformación afín
-	transformacion_afin = calcular_transformacion_afin(puntos_origen=np.float32([[0, 0], [imagen_insertar.shape[1], 0], [imagen_insertar.shape[1],
-	imagen_insertar.shape[0]]]), puntos_destino=puntos_destino)
-
+	altura, ancho, canales = img_fondo.shape
+	
 	# Calcular la matriz de transformación afín
-	puntos_origen = np.float32([[0, 0], [imagen_insertar.shape[1], 0], [imagen_insertar.shape[1], imagen_insertar.shape[0]]])
-	matriz_transformacion = cv2.getAffineTransform(puntos_origen, puntos_destino)
+	puntos_origen = np.float32([[0, 0], [img_insertar.shape[1], 0], [img_insertar.shape[1], img_insertar.shape[0]]])
+	matriz_transformacion = calcular_transformacion_afin(	puntos_origen=np.float32([[0, 0], [img_insertar.shape[1], 0], [img_insertar.shape[1],
+								img_insertar.shape[0]]]),
+								
+								puntos_destino = puntos_destino)
 
 	# Aplicar la transformación a la imagen a insertar
-	imagen_transformada = cv2.warpAffine(imagen_insertar, matriz_transformacion, (ancho, altura))
-	
-	cv2.imwrite('copa_alterada.png', imagen_transformada)
+	imagen_transformada = cv2.warpAffine(img_insertar, matriz_transformacion, (ancho, altura))
 	
 	# Cálculo del cuarto punto del paralelogramo
-	x4 = puntos_destino[1][0] - puntos_destino[0][0] + puntos_destino[2][0]
-	y4 = puntos_destino[1][1] - puntos_destino[0][1] + puntos_destino[2][1] - 2*(puntos_destino[1][1] - puntos_destino[0][1])
+	x4 = -(puntos_destino[1][0] - puntos_destino[0][0]) + puntos_destino[2][0] 
+	y4 = -(puntos_destino[1][1] - puntos_destino[0][1]) + puntos_destino[2][1] 
 	puntos_destino = np.append(puntos_destino, [[x4, y4]], axis=0).astype(np.float32)
-    
+    	
+	#Listas que guardan los puntos para hacer los dos triangulos que forman el paralelogramo
+	puntos_para_mascara1 = puntos_destino[[0, 1, 2]].astype(int)
+	puntos_para_mascara2 = puntos_destino[[0, 2, 3]].astype(int)
+	
 	# Generar una máscara para la imagen insertada
 	mascara = np.ones((altura, ancho), dtype=np.uint8) * 255 
-	#cv2.fillConvexPoly(mascara, puntos_destino.astype(int), 0)
 	
 	# Genera la máscara mediante dos triángulos
-	cv2.fillPoly(mascara, [puntos_destino[:3].astype(int)], 0)
-	cv2.fillPoly(mascara, [puntos_destino[1:].astype(int)], 0)
-	
-	#cv2.imshow('mascara', mascara)
+	cv2.fillPoly(mascara, [puntos_para_mascara1], 0)
+	cv2.fillPoly(mascara, [puntos_para_mascara2], 0)
 
     	# Combinar las imágenes utilizando la máscara
-	imagen_fondo_con_insertada = cv2.bitwise_and(imagen_fondo, imagen_fondo, mask=mascara)
-	imagen_fondo_con_insertada += imagen_transformada
+	img_fondo_con_insertada = cv2.bitwise_and(img_fondo, img_fondo, mask=mascara)
+	img_fondo_con_insertada += imagen_transformada
 
 
-	return imagen_fondo_con_insertada
+	return img_fondo_con_insertada
     
 ###############################################################################################################################
 
