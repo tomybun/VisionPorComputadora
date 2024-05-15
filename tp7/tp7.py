@@ -58,23 +58,22 @@ def insertar_imagen(img_fondo, img_insertar, puntos_destino):
 	img_fondo_con_insertada = cv2.bitwise_and(img_fondo, img_fondo, mask=mascara)
 	img_fondo_con_insertada += imagen_transformada
 
-
 	return img_fondo_con_insertada
     
 
 ###############################################################################################################################
 def transformacion_euclidiana(img, angulo, x, y, escala):
-    (h, w) = img.shape[:2]
-    centro = (w/2, h/2)
+	(h, w) = img.shape[:2]
+	centro = (w/2, h/2)
 
-    # Definir la matriz de transformación euclidiana
-    M = cv2.getRotationMatrix2D(centro, angulo, escala)
-    M[:, 2] += np.array([x, y])
+	# Definir la matriz de transformación euclidiana
+	M = cv2.getRotationMatrix2D(centro, angulo, escala)
+	M[:, 2] += np.array([x, y])
     
-    # Aplicar la transformación euclidiana
-    transformada = cv2.warpAffine(img, M, (w, h))
+	# Aplicar la transformación euclidiana
+	transformada = cv2.warpAffine(img, M, (w, h))
 
-    return transformada
+	return transformada
 
 ###############################################################################################################################
 
@@ -134,11 +133,9 @@ def dibuja(event, x, y, flags, param):
 			
 	
 		
-###############################################################################################################################    
-    
-       
+###############################################################################################################################      
 
-#Obtener el angulo y las coordenadas de traslacion
+#Obtener el angulo y las coordenadas de traslacion (para la transformacion euclidiana)
 if len(sys.argv) > 4:
 	angulo 	= float(sys.argv[1])
 	x	= float(sys.argv[2])
@@ -174,7 +171,8 @@ while True:
 	cv2.imshow('imagen', img)
 	k = cv2.waitKey(1) & 0xFF
 
-	if(k == ord('r')):   # elimina el rectángulo dibujado
+	#Elimina el rectángulo dibujado
+	if(k == ord('r')):   
         	img = img_aux.copy()
         	
 	if k == 27:
@@ -187,8 +185,7 @@ while True:
 	#Transformacion ecuclidiana
 	elif k == ord('e'):	
 		imagen_transformada = transformacion_euclidiana(foto_recortada, angulo, x, y, escala)
-		cv2.imwrite('trans_euclidiana.png', imagen_transformada)
-		break 
+		cv2.imwrite('trans_euclidiana.png', imagen_transformada) 
 	
 	#Transformacion afin
 	elif k == ord('a') or afin_trans:
