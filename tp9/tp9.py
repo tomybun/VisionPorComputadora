@@ -114,7 +114,7 @@ def tamIMG(img, nombreVentana):
 ###############################################################################################################################      
 
 #Lectura de la imagen
-img = cv2.imread('WorkSpace2.jpeg',1)
+img = cv2.imread('WorkSpace3.jpeg',1)
 
 # Crear una copia de la imagen de fondo para mostrar los puntos seleccionados
 img_aux = img.copy()
